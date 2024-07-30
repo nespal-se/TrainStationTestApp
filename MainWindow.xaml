@@ -3,28 +3,35 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:TrainStationTestApp"
         xmlns:vm ="clr-namespace:TrainStationTestApp.ViewModels"
+        xmlns:model ="clr-namespace:TrainStationTestApp.Models"
         mc:Ignorable="d"
-        Title="MainWindow" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" Height="450" Width="800">
+
+        Name="MainAppWindow" 
+        Title="TrainStation Test" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" WindowState="Maximized">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
     <Grid>
-        <ItemsControl ItemsSource="{Binding Path=Lines, ElementName=LineSegment}">
+        <ItemsControl ItemsSource="{Binding Lines}" Name="ShapeCollection">
             <ItemsControl.InputBindings>
-                <MouseBinding Gesture="LeftClick" Command="{Binding LeftMouseDowned}"/>
+                <MouseBinding Gesture="LeftClick" Command="{Binding LeftMouseDowned}" CommandParameter="{Binding ElementName=ShapeCollection, Path=Items.CurrentItem}"/>
             </ItemsControl.InputBindings>
             <ItemsControl.Resources>
                 <SolidColorBrush x:Key="DefaultBrush" Color="Black"/>
-                <SolidColorBrush x:Key="MouseOverBrush" Color="Blue"/>
                 <Style x:Key="ShapeStyle" TargetType="Path">
                     <Setter Property="StrokeThickness" Value="3"/>
                     <Setter Property="Stroke" Value="{StaticResource DefaultBrush}"/>
                     <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Stroke" Value="{StaticResource MouseOverBrush}"/>
-                        </Trigger>
+                        <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}, Mode=FindAncestor}}" Value="True"/>
+                                <Condition Binding="{Binding IsSelectedSegment}" Value="True" />
+                            </MultiDataTrigger.Conditions>
+                        <Setter Property="Stroke" Value="Red"/>
+                        </MultiDataTrigger>
                     </Style.Triggers>
                 </Style>
             </ItemsControl.Resources>
@@ -35,9 +42,25 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Path Style="{StaticResource ShapeStyle}" Data="{Binding}"/>
+                    <Path Style="{StaticResource ShapeStyle}" Data="{Binding LineSegment}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseEnter">
+                                <i:InvokeCommandAction Command="{Binding DataContext.MouseOverCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                   CommandParameter="{Binding }"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="MouseLeave">
+                                <i:InvokeCommandAction Command="{Binding DataContext.MouseLeaveCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                   CommandParameter="{Binding }"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Path>
+
+
+
                 </DataTemplate>
+                
             </ItemsControl.ItemTemplate>
+            
         </ItemsControl>
     </Grid>
 </Window>

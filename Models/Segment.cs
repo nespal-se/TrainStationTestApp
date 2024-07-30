@@ -4,18 +4,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using TrainStationTestApp.ViewModels.Base;
 
 namespace TrainStationTestApp.Models
 {
-    public class Segment
+    public class Segment : ViewModel
     {
-        public Guid LineId { get; set; }
-        public Geometry LineSegment { get; set; }
-        public Segment(Geometry lineSegment)
-        {
-            LineSegment = lineSegment;
-            LineId = Guid.NewGuid();
-        }
 
+        public Guid Id { get; set; }
+        public int GroupId { get; set; }
+
+        private bool isSelectedSegment;
+        public bool IsSelectedSegment 
+        {
+            get { return isSelectedSegment; }
+            set { isSelectedSegment = value; OnPropertyChanged(); } 
+        } 
+        public Geometry LineSegment { get; set; }
+        public Segment(Geometry lineSegment, int groupId)
+        {
+            Id = Guid.NewGuid();
+            GroupId = groupId;
+            LineSegment = lineSegment;
+            IsSelectedSegment = false;
+        }
     }
 }

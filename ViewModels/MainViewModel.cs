@@ -8,23 +8,59 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using TrainStationTestApp.Commands;
 using TrainStationTestApp.Models;
+using System.Windows.Controls;
+using System.Windows.Input;
+using TrainStationTestApp.ViewModels.Base;
+using System.Globalization;
+using System.Windows.Data;
 
 namespace TrainStationTestApp.ViewModels
 {
-    public class MainViewModel
+    public class MainViewModel : ViewModel
     {
         public ObservableCollection<Segment> Lines { get; } = new ObservableCollection<Segment>();
-        public RelayCommand LeftMouseDowned { get; set; }
+        public ICommand LeftMouseDowned { get; set; }
+        public ICommand MouseOverCommand { get; set; }
+        public ICommand MouseLeaveCommand { get; set; }
 
         public MainViewModel()
         {
-            LeftMouseDowned = new RelayCommand(_ => TestMethod(_));
-
+            LeftMouseDowned = new RelayCommand<object>(_ => TestMethod(_));
+            MouseOverCommand = new RelayCommand<object>(_ => MouseOverOn(_));
+            MouseLeaveCommand = new RelayCommand<object>(_ => MouseOverOff(_));
         }
 
-        public void TestMethod(object _)
+        public void TestMethod(object shapeParam)
         {
-
+            throw new NotImplementedException();
         }
+
+        public void MouseOverOn(object e)
+        {
+            var currentSegment = e as Segment;
+            if (currentSegment != null)
+            {
+                foreach (var line in Lines)
+                {
+                    if (line.GroupId == currentSegment.GroupId)
+                        line.IsSelectedSegment = true;
+                }
+            }
+
+        }      
+
+        public void MouseOverOff(object e)
+        {
+            var currentSegment = e as Segment;
+            if (currentSegment != null)
+            {
+                foreach (var line in Lines)
+                {
+                    if (line.GroupId == currentSegment.GroupId)
+                        line.IsSelectedSegment = false;
+                }
+            }
+        }
+
     }
 }

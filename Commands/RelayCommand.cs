@@ -8,22 +8,31 @@ using TrainStationTestApp.Commands.Base;
 
 namespace TrainStationTestApp.Commands
 {
-    public class RelayCommand : Command
+    public class RelayCommand<T> : ICommand
     {
-        private readonly Action<object> _Execute;
-        private readonly Func<object, bool> _CanExecute;
+        private readonly Action<T> _execute;
+        private readonly Predicate<T> _canExecute;
 
-        public RelayCommand(Action<object> Execute, Func<object, bool> CanExecute = null)
+        public RelayCommand(Action<T> execute, Predicate<T> canExecute = null)
         {
-            _Execute = Execute ?? throw new ArgumentNullException(nameof(Execute));
-            _CanExecute = CanExecute;
+            _execute = execute;
+            _canExecute = canExecute;
         }
-        public override bool CanExecute(object parameter) => _CanExecute?.Invoke(parameter) ?? true;
 
-        public override void Execute(object parameter)
+        public bool CanExecute(object parameter)
         {
-            if (!CanExecute(parameter)) return;
-            _Execute(parameter);
+            return _canExecute == null || _canExecute((T)parameter);
+        }
+
+        public void Execute(object parameter)
+        {
+            _execute((T)parameter);
+        }
+
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
         }
     }
 }

@@ -24,10 +24,10 @@ namespace TrainStationTestApp
         public MainWindow()
         {
             InitializeComponent();
-            ViewModel.Lines.Add(new Segment( new EllipseGeometry(new Point(50, 50), 15, 15)));
-            ViewModel.Lines.Add(new Segment(new RectangleGeometry(new Rect(85, 85, 30, 30))));
-            ViewModel.Lines.Add(new Segment(new EllipseGeometry(new Point(150, 150), 15, 15)));
-            ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(200, 200), new Point(250, 280))));
+            ViewModel.Lines.Add(new Segment( new LineGeometry(new Point(50, 50), new Point(40, 60)), 1));
+            ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(70, 70), new Point(80, 120)), 1));
+            ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(120, 10), new Point(180, 260)), 2));
+            ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(200, 200), new Point(250, 280)), 3));
 
             DataContext = ViewModel;
         }
