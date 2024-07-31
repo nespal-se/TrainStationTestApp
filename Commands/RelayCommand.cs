@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,33 +6,31 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using TrainStationTestApp.Commands.Base;
 
-namespace TrainStationTestApp.Commands
+namespace TrainStationTestApp.Commands;
+
+public class RelayCommand<T> : ICommand
 {
-    public class RelayCommand<T> : ICommand
+    private readonly Action<T> execute;
+    private readonly Predicate<T> canExecute;
+
+    public RelayCommand(Action<T> execute, Predicate<T> canExecute = null)
     {
-        private readonly Action<T> _execute;
-        private readonly Predicate<T> _canExecute;
+        this.execute = execute;
+        this.canExecute = canExecute;
+    }
 
-        public RelayCommand(Action<T> execute, Predicate<T> canExecute = null)
-        {
-            _execute = execute;
-            _canExecute = canExecute;
-        }
+    public bool CanExecute(object parameter)
+    {
+        return canExecute == null || canExecute((T)parameter);
+    }
 
-        public bool CanExecute(object parameter)
-        {
-            return _canExecute == null || _canExecute((T)parameter);
-        }
+    public void Execute(object parameter)
+    {
+        execute((T)parameter);
+    }
 
-        public void Execute(object parameter)
-        {
-            _execute((T)parameter);
-        }
-
-        public event EventHandler CanExecuteChanged
-        {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
-        }
+    public event EventHandler CanExecuteChanged {
+        add => CommandManager.RequerySuggested += value;
+        remove => CommandManager.RequerySuggested -= value;
     }
 }

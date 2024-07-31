@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,24 +12,40 @@ using TrainStationTestApp.ViewModels;
 using TrainStationTestApp.ViewModels.Base;
 using TrainStationTestApp.Models;
 
-namespace TrainStationTestApp
+namespace TrainStationTestApp;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    private MainViewModel ViewModel { get; } = new MainViewModel();
+
+    public MainWindow()
     {
-        private MainViewModel ViewModel { get; } = new MainViewModel();
+        InitializeComponent();
+        InitData();
 
-        public MainWindow()
-        {
-            InitializeComponent();
-            ViewModel.Lines.Add(new Segment( new LineGeometry(new Point(50, 50), new Point(40, 60)), 1));
-            ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(70, 70), new Point(80, 120)), 1));
-            ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(120, 10), new Point(180, 260)), 2));
-            ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(200, 200), new Point(250, 280)), 3));
+        DataContext = ViewModel;
+    }
 
-            DataContext = ViewModel;
-        }
+    private void InitData()
+    {
+        ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(200, 200), new Point(600, 200)), 1));
+        ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(600, 200), new Point(700, 200)), 5));
+        ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(700, 200), new Point(900, 300)), 5));
+        ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(200, 250), new Point(600, 250)), 1));
+        ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(600, 250), new Point(800, 250)), 5));
+        ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(50, 300), new Point(150, 300)), 5));
+        ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(150, 300), new Point(700, 300)), 2));
+        ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(700, 300), new Point(900, 300)), 5));
+        ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(180, 350), new Point(550, 350)), 3));
+        ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(550, 350), new Point(800, 350)), 6));
+        ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(800, 350), new Point(900, 350)), 7));
+        ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(130, 400), new Point(560, 400)), 1));
+        ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(560, 400), new Point(800, 350)), 6));
+        ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(100, 375), new Point(130, 400)), 4));
+        ViewModel.Lines.Add(new Segment(new LineGeometry(new Point(50, 375), new Point(100, 375)), 4));
+
     }
 }
