@@ -32,36 +32,56 @@ public class MainViewModel : ViewModel
 
     public void TestMethod(object shapeParam)
     {
-        throw new NotImplementedException();
+
     }
 
     public void MouseOverOn(object e)
     {
         if (e is Segment currentSegment) 
         {
-            foreach (var line in Lines) 
-            {
+
+            foreach (var line in Lines){
                 if (line.GroupId == currentSegment.GroupId) 
                 {
                     line.IsSelectedSegment = true;
                 }
             }
+            
+            ToolTipText = $"Парк: {currentSegment.GroupId}";
+            IsToolTipOpen = true;
         }
-
+        //TODO: добавление заливки
     }      
 
     public void MouseOverOff(object e)
     {
         if (e is Segment currentSegment) 
         {
-            foreach (var line in Lines) 
-            {
+            foreach (var line in Lines) {
                 if (line.GroupId == currentSegment.GroupId) 
                 {
                     line.IsSelectedSegment = false;
                 }
             }
         }
+        IsToolTipOpen = false;
     }
 
+    private string toolTipText;
+    public string ToolTipText {
+        get => toolTipText;
+        set {
+            toolTipText= value;
+            OnPropertyChanged();
+        }
+    }
+
+    private bool isToolTipOpen;
+    public bool IsToolTipOpen {
+        get => isToolTipOpen;
+        set {
+            isToolTipOpen = value;
+            OnPropertyChanged();
+        }
+    }   
 }

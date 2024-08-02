@@ -40,6 +40,10 @@
                     <Canvas/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
+            <ItemsControl.ToolTip>
+                <ToolTip Content="{Binding DataContext.ToolTipText}" IsOpen="{Binding DataContext.IsToolTipOpen}" ToolTipService.InitialShowDelay="0"
+                         DataContext="{Binding Path=PlacementTarget, RelativeSource={RelativeSource Self}}"/>
+            </ItemsControl.ToolTip>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Path Style="{StaticResource ShapeStyle}" Data="{Binding LineSegment}">
@@ -47,7 +51,6 @@
                             <i:EventTrigger EventName="MouseEnter">
                                 <i:InvokeCommandAction Command="{Binding DataContext.MouseOverCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                    CommandParameter="{Binding }"/>
-                                
                             </i:EventTrigger>
                             <i:EventTrigger EventName="MouseLeave">
                                 <i:InvokeCommandAction Command="{Binding DataContext.MouseLeaveCommand, RelativeSource={RelativeSource AncestorType=Window}}"
