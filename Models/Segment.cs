@@ -10,7 +10,6 @@ namespace TrainStationTestApp.Models;
 
 public class Segment : ViewModel
 {
-
     public Guid Id { get; set; }
     public int GroupId { get; set; }
 

@@ -11,14 +11,8 @@
 
         Name="MainAppWindow" 
         Title="TrainStation Test" WindowStartupLocation="CenterScreen" ResizeMode="CanResizeWithGrip" WindowState="Maximized">
-    <Window.DataContext>
-        <vm:MainViewModel/>
-    </Window.DataContext>
     <Grid>
         <ItemsControl ItemsSource="{Binding Lines}" Name="ShapeCollection">
-            <ItemsControl.InputBindings>
-                <MouseBinding Gesture="LeftClick" Command="{Binding LeftMouseDowned}" CommandParameter="{Binding ElementName=ShapeCollection, Path=Items.CurrentItem}"/>
-            </ItemsControl.InputBindings>
             <ItemsControl.Resources>
                 <SolidColorBrush x:Key="DefaultBrush" Color="Black"/>
                 <Style x:Key="ShapeStyle" TargetType="Path">
@@ -54,6 +48,10 @@
                             </i:EventTrigger>
                             <i:EventTrigger EventName="MouseLeave">
                                 <i:InvokeCommandAction Command="{Binding DataContext.MouseLeaveCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                   CommandParameter="{Binding }"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="MouseDown">
+                                <i:InvokeCommandAction Command="{Binding DataContext.LeftMouseDowned, RelativeSource={RelativeSource AncestorType=Window}}"
                                    CommandParameter="{Binding }"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>

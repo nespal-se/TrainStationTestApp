@@ -13,24 +13,30 @@ using System.Windows.Input;
 using TrainStationTestApp.ViewModels.Base;
 using System.Globalization;
 using System.Windows.Data;
+using TrainStationTestApp.Data;
+
 
 namespace TrainStationTestApp.ViewModels;
 
 public class MainViewModel : ViewModel
 {
+    private readonly ILinesRepository linesRepository;
     public ObservableCollection<Segment> Lines { get; } = new ObservableCollection<Segment>();
+
     public ICommand LeftMouseDowned { get; set; }
     public ICommand MouseOverCommand { get; set; }
     public ICommand MouseLeaveCommand { get; set; }
 
-    public MainViewModel()
-    {
-        LeftMouseDowned = new RelayCommand<object>(_ => TestMethod(_));
+    public MainViewModel(ILinesRepository linesRepository) {
+        LeftMouseDowned = new RelayCommand<object>(_ => AnotherMethod(_));
         MouseOverCommand = new RelayCommand<object>(_ => MouseOverOn(_));
         MouseLeaveCommand = new RelayCommand<object>(_ => MouseOverOff(_));
+
+        this.linesRepository = linesRepository;
+        GetData();
     }
 
-    public void TestMethod(object shapeParam)
+    public void AnotherMethod(object shapeParam)
     {
 
     }
@@ -65,6 +71,13 @@ public class MainViewModel : ViewModel
             }
         }
         IsToolTipOpen = false;
+    }
+
+    private void GetData() {
+        var allLines = linesRepository.GetAllLines();
+        foreach (var line in allLines) {
+            Lines.Add(new Segment(line.LineSegment, line.GroupId));
+        }
     }
 
     private string toolTipText;
